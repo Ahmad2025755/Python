@@ -30,7 +30,7 @@ class RPSgame:
         pygame.init()
         self.screen = pygame.display.set_mode(960, 460)
         pygame.display.set_caption("RPS smasher")
-
+ 
 
         self.bg = pygame.image.load("background.jpg")
         self.r_button = pygame.image.load("r_button.png").convert_alpha()
@@ -63,11 +63,116 @@ class RPSgame:
 
 
 
-def player(self):
+    def player(self):
+        if self.rock_btn.clicked(30):
+           self.p_option = "rock"
+           self.screen.blit(self.choose_rock,  (120,200)) 
+        elif self.rock_btn.clicked(30):
+           self.p_option = "paper"
+           self.screen.blit(self.choose_paper,  (120,200)) 
+        elif self.rock_btn.clicked(30):
+           self.p_option = "rock"
+           self.screen.blit(self.choose_scissors,  (120,200)) 
+           return self.p_option
 
-    if self.rock_button.clicked(30):
-        self.p_optioon = "Rock"
-        self.screen.blit(self.choose_rock(120,200))
+
+    def computer(self):
+        self.pc_random_choice = ""
+        options = ["Rock","Paper","Scissors"]
+        pc_choice = random.choice(options)
+
+
+        if pc_choice == "rock":
+            self.screen.blit(self.choose_rock, (650,200))
+        elif pc_choice == "paper":
+            self.screen.blit(self.choose_paper,(650,200))
+        elif pc_choice == "Scissors":
+            self.screen.blit(self.choose_scissors,(650,200))
+
+        self.pc_random_choice = pc_choice
+        return pc_choice
 
 
 
+    def player_choice_chache(self):
+        pl = self.p_option
+        pc = self.pc_random_choice
+
+
+        if (pl == "Rock" and pc == "Paper" or pl == "Paper" and pc == "Scissors" or pl == "Scissors" and pc == "Rock"):
+            self.pc_score += 1
+        elif pl == pc:
+            pass
+        else:
+            self.pl_score += 1
+        return self.pl_score
+
+
+    def pc_choice_chache(self):
+        pl = self.p_option
+        pc = self.pc_random_choice
+
+
+        if (pl == "Rock" and pc == "Paper" or pl == "Paper" and pc == "Scissors" or pl == "Scissors" and pc == "Rock"):
+            self.pc_score += 1
+        elif pl == pc:
+            pass
+        else:
+            self.pl_score += 1
+        return self.pc_score
+    
+    def image_reset(self):
+        self.text = self.font.render ("", True, (0,0,0))
+        self.screen.blit(self.bg(20,500))
+        self.screen.blit(self.bg(330,500))
+        self.screen.blit(self.bg(640,500))
+
+
+    def game_loop(self):
+        run = True
+        clock = pygame.time.Clock()
+        rps_game = RPSGame()
+        
+
+        while run:
+            pygame.display.update()
+            self.screen.blit(self.text, (330,0))
+
+            for event in pygame.event.get():
+
+
+                if event.type == pygame.QUIT:
+                    run = False
+                
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+
+
+                    if self.rock_btn.clicked(30) or self.paper.btn.clicked(340) or self.rock_btn.clicked(640):
+
+                        rps_game.image_reset()
+                        rps_game.player()
+                        rps_game.computer()
+
+
+                        self.pl_score += rps_game.pl_score_chache()
+                        self.pl_score += rps_game.pc_score_chache()
+
+
+                        self.text = self.font.render(
+                            f"{self.pl_score} : {self.pc_score}", True,(255,255,255)
+                        )
+
+
+            pygame.display.flip()
+            clock.tick(30)
+    
+    
+
+    pygame.quit()
+
+
+
+if __name__ == "__main__":
+    game = RPSgame
+    game.game_loop
